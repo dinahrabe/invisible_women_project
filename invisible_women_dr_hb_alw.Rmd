@@ -1,0 +1,137 @@
+---
+title: "Open Data in  Germany"
+subtitle: "Where are the WOMEN?"
+author: "Anna-Lisa Wirth, Dinah Rabe, Helena Bakic"
+date: "12/19/2021"
+output: rmdformats::readthedown
+  
+---
+
+For our final project in the course Introduction to Data Science at Hertie School in Berlin, we had a great idea. Or at least we thought we did. As all three of us (Dinah, Helena and Anna-Lisa) are die-hard fans of Caroline Criado-Perez and her book *Invisible Women*, so we wanted to replicate her finding on female bone fractures during winter times in Sweden for the German context. Why that is a thing?! Read the book, dah. 
+
+Okay, okay, data from Sweden have shown that during winter women suffer more bone fractures than men. This is traced back to different commuting behavior of men and women: Men more commonly use the car while women walk more. Until a few yeras ago, Swedish roads always got cleared from snow first during winter times, while sidewalks were deprioritized. The women on the sidewalks were living dangerous lives compared to the men in cars. You get the idea. After discovering the connection between different commuting behavior and bone fractures, Sweden started clearing the sidewalks first. As a result, women's bone fractures in winter were cut in half. Cool policy case, right? So we wanted to see how the situation is in Germany.
+Well, long story short: that did not work out. We couldn't find any usable data. The end.
+
+No. Wait. Actually, a lot of stuff happened in between. On our journey, we changed direction a couple of times and still got some interesting insight to share. So let us take you along the ride.
+
+Btw, it all started with this:
+
+![The Inspiration](./other_res/img_book.jpg)
+
+## The iterative search for data
+
+We are convinced that *open data provided by the government should be inclusive of important societal issues like gender*. Now, we want every single data set to contain gender as a variable – uhm – no. There should be a default consideration for gender – binary variables for men and women – in data sets that are treating human behavior – or simpler: wherever humans and what humans do show up in the data sets the data should be gendered. The data set on hospital visits should be gendered. The data set on freight transport and mere quantities of import export should not be – no humans there. Those kinds of data sets can still be used for gendered analysis in relation with gendered behavioral data of consumptions. SO we started right at ['govdata.de'](https://www.govdata.de/) as it is THE official German open data portal maintained by the national administration. It is a portal that aggregates open data sources across Germany. As it is perceived as a trustworthy and official source of open data it should be promoting quality like easily usable data. Further, the list of data should adhere to certain standards like inclusiveness. Besides, how does it collect so much data? Well, it contains metadata (data about data like who produced it and what content categories are) for more than 55000 data sets which can be searched by interested individuals. To our dismay, our first search results on the platform did not give us our desired data set on bone fractures or commuting behavior for the city of Berlin. We decided to let go of our beloved snow example and broadened our search for any gendered datasets – so data sets that include gender in their variables. We searched in titles, topics and keywords for any hints of gender – and we had to realize: there are very few, if any, interesting data sets that touch upon gender.
+As our goal of finding open access data about gender for Germany on official government websites led us straight into a data desert or at least savanna, we needed to reconsider our project goals. Instead of dropping our feminist motivation or our commitment to German open data, we decided to look at it from a meta-level. As the govdata-portal provides standardized metadata for its datasets, we decided to do a meta-analysis of the existing datasets on the govdata-portal to describe and visualize the gender data gap in the German open government data. 
+
+## Our Findings
+
+As we were sifting through the metadata, we found quite some interesting facts. For instance, currently less than one in ten data sets are concerning gender. Looking into the matter a bit deeper, these “gendered” data sets started appearing in 2015, which was arguably a good year for them in the portal. When the portal was just starting to operate, as we are now imagining, someone must have posted a bunch of data sets they were keeping in a proverbial drawer. A staggering 27% of them included women. However, as the portal was picking up, the ratio of gendered data sets was plummeting. Overall, the data sets available on govdata.de went through the roof over the last 2 years. One can't say the same about gendered data.
+
+![Figure 1](./outputs/datasets-yearly.PNG)
+
+This led us to ask ourselves once more: “Where are the women?”. So, we literally explored where the gendered data is. In order to do this, we sneaked into the topics of the data sets to figure out the most common areas where gendered data sets can be found.
+
+![Figure 2](./outputs/datasets-topics.PNG)
+
+Our analysis indicated that gendered datasets only show up in certain topics. They are predominately found in the area of health, with some honourable mentions in the area of justice, society, science, and education. Unsurprisingly, the data sets that are connected to women have a caring connotation. Having seen at the surface how data is linked and where gendered data is concentrated we decided to go a bit deeper.
+
+So, in the next step we explored what gendered vs. non-gendered datasets are about. We conducted a topic analysis on gendered and non-gendered data sets to compare what they are about. To know how we did that exactly the interested reader can check the methodological appendix on the exact methods and its caveates. To simplify, we focused on the area of health as that's where the majority of the gendered data is.
+
+So how did we do that exactly? We used the descriptions of the datasets as input to feed the algorithm as they provided the biggest quantity of text. We did that for the four topics that contain most gendered data. You have to keep in mind, that topic model-algorithms are normally used to larger quantities of text and therefore the applicability to our description snippets is only limited. To not lose yourself in a labyrinth of terms we only show you a selection for the health topic field so you get an idea about what we were looking at.
+
+
+
+```{r echo=FALSE, message=FALSE,warning=FALSE}
+
+library(dplyr)
+library(tidyverse)
+table1_df <- read_csv("outputs/table_1_gender_ges_eng.csv")
+table2_df <- read_csv("outputs/table_2_nongender_ges_eng.csv")
+
+library(kableExtra)
+  
+# visualize datasets that contain gender
+table1_df %>%
+  kbl() %>%
+  kable_minimal(bootstrap_options = "condensed",font_size = 10) %>%
+  add_header_above(c("Table 1 - Selection out of Ten: Topics Modelled \n for the Healh Datasets That Include Gender" = 3), color = "#808080") %>%
+  row_spec(0,color = "#800000") %>%
+  row_spec(c(1:10),color = "#808080")
+
+
+# visualize datasets that do not contain gender
+table2_df %>%
+  kbl() %>%
+  kable_minimal(bootstrap_options = "condensed",font_size = 10) %>%
+  add_header_above(c("Table 2 - Selection out of Ten: Topics Modelled \n for the Healh Datasets That Do Not Include Gender" = 3), color = "#808080") %>%
+  row_spec(c(0:10),color = "#808080")
+
+```
+
+We found that gendered data sets are more likely to be about nursing/caring (topic 6) and another citizen related topic of causes of death (topic 7). On the other side we find infrastructure related topics for the ungendered datasets like pharmacy locations (topic 5) and noise pollution mapping (topic 7). These findings are not really surprising as we know, that women are very over represented in the nursing/care sector. Interestingly, you see that Covid appears in both of the subsets (topic 1 for the gendered datasets and topic 3 for the ungendered datasets). 
+
+## The Take-away
+
+Well, huh, tough one. We are aware that open data in and of itself is a great ideal that is - at least in the German context - still learning to walk. It carries great promise but is not quite there yet. We believe that gendered data is necessary in all areas of governance. This has been shown by the Swedish snow clearing example. To connect gender to traffic data might still seem counterintuitive to some. However, as shown by the success in lowering bone fractures it is still important to apply the gender lens.  The finding that gendered data sets are found predominately in some categories led us to ask ourselves “Why are the women there?”. 
+
+So while it is amazing that the German administration is providing open data, there is still a lot to improve on various levels: 
+
+(1) the metadata provided needs to be improved. It is great that a OECD wide standard is used for the structure of the metadata, but there is definitely room for improvement for the standardization of tags; 
+
+(2) the available datasets are not very diverse (even if we only talk about gender, leaving out other characteristics). How to improve this? One way would be by doing it like Sweden implementing a gender by default policy. Read on here ['OECD Policy Report '](https://www.oecd.org/sweden/sweden-strengthening-gender-mainstreaming.pdf) 
+
+So if you want to do policy research about gender - and there are plenty of reasons you might - you fall into the **gender data gap**. We hope that this will change in the upcoming years and there are signs of hope: From 2022 every German ministry is obliged to appoint Chief Data Officers and put together Data-Teams. So, we will monitor this development closely and we hope that soon there will be no need to ask “Where are the women?”.
+
+Until then we leave you with our (clearly exaggerated) impression of the govdata.de priorities at the moment:
+
+
+![Figure 5](./outputs/tf_plot.PNG)
+
+So, there you are. That was the hopefully nice-enough-to-read article about our project. In case you just can't get enough we prepared a report about our methodology. Knock yourself out.
+
+# Methodology Report{.tabset}
+
+## Contributions
+
+**Individual contributors**
+
+* Dinah Rabe(d.rabe@mpp.hertie-school.org)
+
+* Helena Bakic(211553@mds.hertie-school.org)
+
+* Anna-Lisa Wirth (213286@mds.hertie-school.org)
+
+**Parts**
+
+1) Idea: Dinah Rabe, Helena Bakic and Anna-Lisa Wirth
+
+2) Data search and collection: Dinah Rabe, Helena Bakic and Anna-Lisa Wirth
+
+3) Data analysis: Dinah Rabe, Helena Bakic and Anna-Lisa Wirth
+
+4) Data visualization:Dinah Rabe, Helena Bakic and Anna-Lisa Wirth
+
+5) Storyline and report: Dinah Rabe, Helena Bakic and Anna-Lisa Wirth
+
+## Executive Summary
+
+We used metadata in rdf form to analyze the prevalence of gender in 54682 data sets from ['govdata.de'](https://www.govdata.de/). The data was retrieved through an API and cleaned. For the analysis different parts of the data set were subset in order to filter for gendered data. Four different data analysis approaches were performed: calculating the percentage for the overall data sets and gendered data thereof and comparing on an annual basis, filtering the amount of gendered and non-gendered data sets per topic, unsupervised topic modeling with LDA on the descriptions, term frequency analysis on the keywords. We found that gendered data sets only make up a small amount (~6 percent) of overall data sets and are confined to 7 out of 12 topics. Furthermore, the most prevalent data appears to be treating construction and traffic. Our analysis has shown that there is a stark gender data gap and in order to be inclusive the portal would need to apply (inclusive) standards on the data published.
+
+## What we did:
+
+For the purpose of exploring the gender data gap, we analysed the ['govdata.de'](https://www.govdata.de/) portal metadata. The portal serves as the central point to access administrative data from the federal, state and local governments in Germany and aggregates data sources from 13 federal states. At the time of the writing of this report, it consisted of 54682 data sets.
+
+Every data set in the portal is described by metadata. Metadata is "data that provides information about other data", and in this case, it refers to properties of data sets, such as who created it and when and what it is about. Metadata is provided by the depositors of the data, that is, public servants across Germany who collect, manage and use data in their work and who deposit the data to the portal voluntarily. Luckily, the portal uses standardised metadata structures which means that (almost) all data sets have the same types of metadata; however, the depth of the description ultimately depends on the depositor. We accessed the metadata for all data sets using the portal's CKAN-powered API  ["endpoint']("https://www.govdata.de/ckan/api"). CKAN, as a leading data management system for open government data, has already developed methods that allow for easy retrieval of metadata.
+
+Our data analysis included:
+
+1. Data cleaning
+2. Text mining and visualisations
+
+A big part of the project was preparatory work of the data, as the provided API could only be queried in sets of 1000, leading to a list of 55 nested lists containing all metadata. We needed to extract the relevant metadata for our purpose: titles, short descriptions, depositor-defined keywords, topics and the data deposition date. After combining all these information into one final dataframe the data was cleaned (removing german stopwords, unnecessary punctuation, numbers etc.)
+
+To analyse the gender data gap, we have compared the data sets that include gender as an information to those who do not. We defined the "gendered" data sets as the ones whose metadata mention "gender", "women" or "female" in either title, description or keywords. It is possible that this strategy omitted some gendered data sets (and included some that are less than meaningful); however, as data depositors know their data best, it is likely a good approximation of whether or not the data set has data split by gender. We then compared the total number of gendered and non-gendered data sets per year and per topic. 
+
+To go one step deeper into the comparison of the gendered vs nongendered datasets we attempted to do topicmodelling for both subsets using the LDA-algorithm. We used the descriptions of the datasets as the text to be analyzed by this unsupervised learning algorithm. We knew that the applicability of the LDA algorithm to our case is/might be limited, as the quantity of words in the description of the datasets is rather small. Nevertheless we analyzed the four topic fields that contain most gendered datasets, devided them in the two subsets of gendered vs. nongendered datasets and extracted 10 topics (aka groups of words) for each one of them. It became clear that one the one hand the data was not clean and prepared enough for quantitative text analysis, and on the other hand the quantity of text maybe not big enough, because the algorithm produced a variation of topics while re-running it, reproducibility could only be ensured by setting a seed. The results have to be interpreted with caution and therefore we decided to only present a small glimpse of it to the reader. Going beyond the scope of this project, other methods of quantitative text analysis should be used to dig deeper into the topic differences between the two subsets of data.
+
+The term frequency modelling was done on the tabs column of the data set as these represent deliberately assigned keywords. The 100 most frequent terms were determined. For illustrative purposes the 10 selected terms fell in either of three categories 1) terms more prevalent than gender which were deemed to be culturally telling for German datasets (7 terms) 2) two terms that were associated with gender - "gender" and "female" 3) as well as the term "covid19" due to its importance in the current pandemic (at the time of writing this article). The horizontal bars for the term have a length proportional to their prevalence (between 796 for "covid19" to 6284 for "bebauungsplan") and are ordered from most to least prevalent out of the selection. The general dataset was used during this process.
