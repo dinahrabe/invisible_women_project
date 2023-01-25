@@ -33,3 +33,6 @@ We find that the first gendered datasets were published in 2015 on the GovData P
 ## License
 
 The material in this repository is made available under the [MIT license](http://opensource.org/licenses/mit-license.php).
+
+## Note
+This repository was worked on in a github classroom environment and therefore had to be re-located into my personal github, thereby the commit-history was lost.
